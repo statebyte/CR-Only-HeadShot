@@ -3,5 +3,5 @@
 Provide key for round only headshot
 
 ```
-	"only_head"		"1"				-	round only headshot.
+"only_head"	"1" // round only headshot.
 ```
