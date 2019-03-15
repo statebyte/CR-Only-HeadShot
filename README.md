@@ -1,4 +1,4 @@
-## [CR] Only HeadShot(https://github.com/SomethingFromSomewhere/Custom-Rounds/blob/master/scripting/CR_Doors.sp)
+## CR [Only HeadShot](https://github.com/SomethingFromSomewhere/Custom-Rounds/blob/master/scripting/CR_Doors.sp)
 
 Provide key for round only headshot
 
