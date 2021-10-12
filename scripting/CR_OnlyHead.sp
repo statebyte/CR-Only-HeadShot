@@ -8,13 +8,14 @@
 
 public Plugin myinfo =
 {
-	name        = 	"[CR] Only HeadShot",
+	name        = 	"[CR] Only HeadShot", // Спасибо Someone за ядро
 	author      = 	"FIVE",
-	version     = 	"2.0.0", // Спасибо Faya & Kruzya
+	description =	"Provides Only HeadShot for custom rounds",
+	version     = 	"2.2", // Спасибо Faya & Kruzya за фикс кода
 	url         = 	"http://hlmod.ru"
 };
 
-bool g_bOnlyHSEnable;
+int g_iOnlyHSEnable;
 
 public void OnPluginStart()
 {
@@ -33,36 +34,41 @@ public void OnClientPutInServer(int iClient)
 
 public Action OnTakeDamage(int iVictim, int &iAttacker, int &iInflictor, float &fDamage, int &iDamageType, int &iWeapon, float fDamageForce[3], float fDamagePosition[3], int iDamageCustom)
 {
-	if(g_bOnlyHSEnable == false)
+	if(g_iOnlyHSEnable > 0 && iWeapon > 0)
 	{
-		return Plugin_Continue;
+		char sClassname[10];
+		GetEntPropString(iWeapon, Prop_Data, "m_iClassname", sClassname, sizeof(sClassname));
+
+		if(g_iOnlyHSEnable == 2 && (sClassname[0] == 'w' && (sClassname[7] == 'k' || (sClassname[7] == 'b' && sClassname[8] == 'a')))) return Plugin_Continue;
+
+		if(iDamageType & CS_DMG_HEADSHOT) return Plugin_Continue;
+		else return Plugin_Handled;
 	}
 
-	if(iDamageType & CS_DMG_HEADSHOT) {
-		return Plugin_Continue;
-	}else{
-		return Plugin_Handled;
-	}
+	return Plugin_Continue;
 }
 
 public void CR_OnRoundStart(KeyValues Kv)
 {
 	if(Kv)
 	{
-		g_bOnlyHSEnable = view_as<bool>(Kv.GetNum("only_head"));
-		if(g_bOnlyHSEnable)
+		g_iOnlyHSEnable = Kv.GetNum("only_headshot", 0);
+		
+		switch(g_iOnlyHSEnable)
 		{
-			CGOPrintToChatAll("В этом раунде включен режим {RED}Only HeadShot");
+			case 1: CGOPrintToChatAll("В этом раунде включен режим {RED}Only HeadShot (NOKNIFE)");
+			case 2: CGOPrintToChatAll("В этом раунде включен режим {RED}Only HeadShot (KNIFE)");
 		}
+		
 	}
 }
 
 public void OnMapStart()
 {
-	g_bOnlyHSEnable = false;
+	g_iOnlyHSEnable = 0;
 }
 
 public void CR_OnRoundEnd(KeyValues Kv)
 {
-	g_bOnlyHSEnable = false;
+	g_iOnlyHSEnable = 0;
 }
