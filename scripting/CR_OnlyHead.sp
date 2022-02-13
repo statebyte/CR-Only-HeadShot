@@ -52,7 +52,7 @@ public void CR_OnRoundStart(KeyValues Kv)
 {
 	if(Kv)
 	{
-		g_iOnlyHSEnable = Kv.GetNum("only_headshot", 0);
+		g_iOnlyHSEnable = Kv.GetNum("only_head", 0);
 		
 		switch(g_iOnlyHSEnable)
 		{
